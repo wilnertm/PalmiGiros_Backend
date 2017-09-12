@@ -7,6 +7,7 @@ package com.palmigiros.jpa.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -21,6 +22,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -30,12 +32,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "giros")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Giros.findAll", query = "SELECT g FROM Giros g")
-    , @NamedQuery(name = "Giros.findById", query = "SELECT g FROM Giros g WHERE g.id = :id")
-    , @NamedQuery(name = "Giros.findByFecha", query = "SELECT g FROM Giros g WHERE g.fecha = :fecha")
-    , @NamedQuery(name = "Giros.findByEstado", query = "SELECT g FROM Giros g WHERE g.estado = :estado")
-    , @NamedQuery(name = "Giros.findByMonto", query = "SELECT g FROM Giros g WHERE g.monto = :monto")})
 public class Giros implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,7 +44,7 @@ public class Giros implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fecha;
     @Column(name = "estado")
-    private Boolean estado;
+    private Boolean estado = false;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "monto")
     private BigDecimal monto;
@@ -61,7 +57,10 @@ public class Giros implements Serializable {
     @JoinColumn(name = "idClienteReceptor", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Clientes idClienteReceptor;
-
+    
+    @Transient
+    SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy");
+    
     public Giros() {
     }
 
@@ -77,12 +76,12 @@ public class Giros implements Serializable {
         this.id = id;
     }
 
-    public Date getFecha() {
-        return fecha;
+   public String getFecha() {
+        return date.format(fecha);
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+    public void setFecha(String fecha) {
+        this.fecha = new Date();
     }
 
     public Boolean getEstado() {
@@ -125,25 +124,7 @@ public class Giros implements Serializable {
         this.idClienteReceptor = idClienteReceptor;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Giros)) {
-            return false;
-        }
-        Giros other = (Giros) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
+   
 
     @Override
     public String toString() {
