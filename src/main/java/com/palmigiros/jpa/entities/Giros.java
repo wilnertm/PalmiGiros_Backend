@@ -7,8 +7,8 @@ package com.palmigiros.jpa.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -40,6 +41,9 @@ public class Giros implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    
+    @Basic(optional = true)
+    @NotNull
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
@@ -48,9 +52,14 @@ public class Giros implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "monto")
     private BigDecimal monto;
-    @JoinColumn(name = "idCiudad", referencedColumnName = "id")
+    @JoinColumn(name = "idCiudadEmisor", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Ciudades idCiudad;
+    private Ciudades idCiudadEmisor;
+    
+    @JoinColumn(name = "idCiudadReceptor", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Ciudades idCiudadReceptor;
+    
     @JoinColumn(name = "idClienteEmisor", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Clientes idClienteEmisor;
@@ -60,6 +69,15 @@ public class Giros implements Serializable {
     
     @Transient
     SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy");
+
+    public Giros(Integer id, Date fecha, BigDecimal monto, Ciudades idCiudadEmisor, Clientes idClienteEmisor, Clientes idClienteReceptor) {
+        this.id = id;
+        this.fecha = fecha;
+        this.monto = monto;
+        this.idCiudadEmisor = idCiudadEmisor;
+        this.idClienteEmisor = idClienteEmisor;
+        this.idClienteReceptor = idClienteReceptor;
+    }
     
     public Giros() {
     }
@@ -100,13 +118,23 @@ public class Giros implements Serializable {
         this.monto = monto;
     }
 
-    public Ciudades getIdCiudad() {
-        return idCiudad;
+    public Ciudades getIdCiudadEmisor() {
+        return idCiudadEmisor;
     }
 
-    public void setIdCiudad(Ciudades idCiudad) {
-        this.idCiudad = idCiudad;
+    public void setIdCiudadEmisor(Ciudades idCiudadEmisor) {
+        this.idCiudadEmisor = idCiudadEmisor;
     }
+
+    public Ciudades getIdCiudadReceptor() {
+        return idCiudadReceptor;
+    }
+
+    public void setIdCiudadReceptor(Ciudades idCiudadReceptor) {
+        this.idCiudadReceptor = idCiudadReceptor;
+    }
+
+    
 
     public Clientes getIdClienteEmisor() {
         return idClienteEmisor;

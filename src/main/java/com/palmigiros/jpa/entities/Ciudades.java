@@ -16,8 +16,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
@@ -42,8 +40,10 @@ public class Ciudades implements Serializable {
     @Size(max = 45)
     @Column(name = "ciudad")
     private String ciudad;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCiudad")
-    private List<Giros> girosList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCiudadEmisor")
+    private List<Giros> girosListEmisor;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCiudadReceptor")
+    private List<Giros> girosListReceptor;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCiudad")
     private List<Clientes> clientesList;
     @JoinColumn(name = "idDepartamento", referencedColumnName = "id")
@@ -72,16 +72,24 @@ public class Ciudades implements Serializable {
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
     }
-
     @XmlTransient
-    public List<Giros> getGirosList() {
-        return girosList;
+    public List<Giros> getGirosListEmisor() {
+        return girosListEmisor;
     }
 
-    public void setGirosList(List<Giros> girosList) {
-        this.girosList = girosList;
+    public void setGirosListEmisor(List<Giros> girosListEmisor) {
+        this.girosListEmisor = girosListEmisor;
+    }
+    @XmlTransient
+    public List<Giros> getGirosListReceptor() {
+        return girosListReceptor;
     }
 
+    public void setGirosListReceptor(List<Giros> girosListReceptor) {
+        this.girosListReceptor = girosListReceptor;
+    }
+
+   
     @XmlTransient
     public List<Clientes> getClientesList() {
         return clientesList;
