@@ -77,10 +77,19 @@ public class ClientesREST {
      */
     @GET
     @Path("find")
-    public Clientes findClientesByNumDocumento(
+    public Response findClientesByNumDocumento(
             @QueryParam("documento") String documento
     ) {
-        return clientesEJB.findClientesByNumDocumento(documento);
+        System.out.println("DOC"+documento);
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.create();
+       
+            Clientes cliente =  clientesEJB.findClientesByNumDocumento(documento);
+            if(cliente != null){
+            return Response.status(Response.Status.ACCEPTED).entity(cliente).build();
+            } else{
+                return Response.status(Response.Status.NOT_FOUND).entity(gson.toJson("No se encuentra el cliente")).build();
+            }
     }
    
   
