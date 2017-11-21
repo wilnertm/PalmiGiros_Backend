@@ -69,7 +69,7 @@ public class GirosFacade extends AbstractFacade<Giros> {
         cq.orderBy(cb.asc(giro.get(Giros_.idClienteReceptor)));
         TypedQuery<Giros> q = em.createQuery(cq);
         try {
-            return q.setMaxResults(10).getResultList();
+            return q.setMaxResults(20).getResultList();
         } catch (NoResultException ex) {
             return null;
         }
